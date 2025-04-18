@@ -5,17 +5,9 @@ from telegram import Bot
 from telegram.constants import ParseMode
 import asyncio
 import bleach
-from html import escape
+from jinja2 import Template
 
 app = Flask(__name__)
-
-template = """
-<b>SMTP2Telegram</b>
-Date: {date}
-Subject: {subject}
-
-{content}
-"""
 
 # Get token from environment variable
 bot_token = os.environ.get('TELEGRAM_BOT_TOKEN')
@@ -54,9 +46,6 @@ def sanitize_html_for_telegram(unsafe_html):
         strip_comments=True
     )
     
-    # Ensure any remaining HTML entities are properly escaped
-    sanitized = escape(sanitized)
-    
     return sanitized
 
 @app.route('/webhook', methods=['POST'])
@@ -71,9 +60,16 @@ def webhook():
         else:
             content = sanitize_html_for_telegram(json_data['html'])
 
-        message_str = template.format(
-            date=json_data['date'],
-            subject=json_data['subject'],
+        # Template is in templates/message.j2
+        with open('templates/message.j2', 'r') as template_file:
+            template_content = template_file.read()
+
+        # Create a Jinja2 template
+        template = Template(template_content)
+
+        # Generate message string using the template
+        message_str = template.render(
+            json_data=json_data,
             content=content
         )
         print(message_str, flush=True)

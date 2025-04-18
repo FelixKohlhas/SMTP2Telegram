@@ -1,0 +1,18 @@
+version: '3.8'
+services:
+  ehlo:
+    container_name: ehlo
+    build: ehlo-docker/.
+    ports:
+      - "10025:10025" # SMTP port
+    environment:
+      - TARGET_URL=http://smtp2telegram:5000/webhook
+    restart: unless-stopped
+
+  smtp2telegram:
+    container_name: smtp2telegram
+    build: smtp2telegram-docker/.
+    environment:
+      - TELEGRAM_BOT_TOKEN="123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11"
+      - TELEGRAM_CHAT_ID="123456789"
+    restart: unless-stopped

@@ -1,5 +1,7 @@
 <b>📧 {{ json_data['headers']['subject'] }}</b>
 From: {{ json_data['headers']['from'] }}
 Date: {{ json_data['headers']['date'] }}
+{% if json_data['text'] %}
 
-{{ content }}
+{{ json_data['text'] }}
+{% endif %}

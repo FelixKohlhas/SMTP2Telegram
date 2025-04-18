@@ -1,3 +1,7 @@
+<div align="center">
+<img src="https://github.com/user-attachments/assets/1824edea-1fdc-4854-87b5-27457e51abfa" width="50%">
+</div>
+
 # SMTP2Telegram 📧➡️📱
 
 A lightweight SMTP server that forwards incoming emails to Telegram. Designed to run in Docker for easy deployment.
